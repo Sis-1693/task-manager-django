@@ -9,11 +9,11 @@ def update_overdue(request):
 
     overdue_tasks = Task.objects.filter(
         due_date__lt=today
-    ).exclude(status='DONE').exclude(status='OVERDUE')
+    ).exclude(status__in=['DONE', 'OVERDUE'])
 
     count = overdue_tasks.update(status='OVERDUE')
 
     return Response({
-        "message": "Overdue updated successfully",
+        "message": "Overdue tasks updated",
         "updated_tasks": count
     })
