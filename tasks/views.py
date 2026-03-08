@@ -1,11 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.utils.timezone import now
+from datetime import date
 from .models import Task
 
 @api_view(['GET'])
 def update_overdue(request):
-    today = now().date()
+
+    today = date.today()
 
     overdue_tasks = Task.objects.filter(
         due_date__lt=today

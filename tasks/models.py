@@ -11,6 +11,3 @@ class Task(models.Model):
 
     class Meta:
         db_table = 'tasks'
-
-    def __str__(self):
-        return self.title
