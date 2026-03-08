@@ -1,20 +1,36 @@
+import requests
+from datetime import date
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from datetime import date
-from .models import Task
+
+LARAVEL_API = "https://task-manager-s0b7.onrender.com/api"
+
 
 @api_view(['GET'])
 def update_overdue(request):
 
-    today = date.today()
+    response = requests.get(f"{LARAVEL_API}/tasks")
+    tasks = response.json()
 
-    overdue_tasks = Task.objects.filter(
-        due_date__lt=today
-    ).exclude(status__in=['DONE', 'OVERDUE'])
+    today = str(date.today())
+    updated = []
 
-    count = overdue_tasks.update(status='OVERDUE')
+    for task in tasks:
+
+        if task["status"] not in ["DONE", "OVERDUE"]:
+
+            if task["due_date"] < today:
+
+                task_id = task["id"]
+
+                requests.put(
+                    f"{LARAVEL_API}/tasks/{task_id}/status",
+                    json={"status": "OVERDUE"}
+                )
+
+                updated.append(task_id)
 
     return Response({
         "message": "Overdue tasks updated",
-        "updated_tasks": count
+        "updated_tasks": updated
     })
