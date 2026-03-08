@@ -10,5 +10,7 @@ class Task(models.Model):
     due_date = models.DateField()
 
     class Meta:
-        db_table = 'tasks'   # IMPORTANT (Laravel table name)
-        managed = False      # Django migration nahi karega
+        db_table = 'tasks'
+
+    def __str__(self):
+        return self.title
