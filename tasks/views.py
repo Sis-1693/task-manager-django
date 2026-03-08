@@ -28,7 +28,12 @@ def update_overdue(request):
                     json={"status": "OVERDUE"}
                 )
 
-                updated.append(task_id)
+                updated.append({
+                    "id": task["id"],
+                    "title": task["title"],
+                    "status": "OVERDUE",
+                    "due_date": task["due_date"]
+                })
 
     return Response({
         "message": "Overdue tasks updated",
